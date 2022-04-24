@@ -1,4 +1,7 @@
-﻿using System;
+﻿using gzor.DBFactory;
+using gzor.Model;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,10 +13,12 @@ namespace gzor
     public static class Globalgzor
     {
 
-        public static string RootPath = AppDomain.CurrentDomain.BaseDirectory;
+        private static string RootPath = AppDomain.CurrentDomain.BaseDirectory;
 
-        public static string DefaultConnectString = File.ReadAllText(RootPath + "CONNECTSTRING.JSON");
+        public static DataBaseConfig DataBaseConfig = JsonConvert.DeserializeObject<DataBaseConfig>(File.ReadAllText(RootPath + "DATABASECONFIG.JSON"));
 
-        public static string EntireSqlCommands = File.ReadAllText(RootPath + "SQLCOMMANDS.JSON");
+        public static List<SqlCommand> EntireSqlCommands = JsonConvert.DeserializeObject<List<SqlCommand>>(File.ReadAllText(RootPath + "SQLCOMMANDS.JSON"));
+
+        public static object DataBaseUtil = DataBaseFactory.CreateFactory(DataBaseConfig.DbType);
     }
 }
